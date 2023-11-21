@@ -2,6 +2,8 @@ package vn.edu.usth.controller;
 
 import vn.edu.usth.service.UserService;
 import vn.edu.usth.model.User;
+import vn.edu.usth.exception.UserNotFoundException;
+import vn.edu.usth.exceptionhandler.ExceptionHandler;
 import org.eclipse.microprofile.openapi.annotations.media.Content;
 import org.eclipse.microprofile.openapi.annotations.media.Schema;
 import org.eclipse.microprofile.openapi.annotations.security.SecurityScheme;
@@ -39,6 +41,19 @@ public class UserController {
             content = @Content(mediaType = "application/json", schema = @Schema(implementation = User.class))))
     public List<User> getUsers() {
         return userService.getAllUsers();
+    }
+    @GET
+//    @RolesAllowed({"USER", "ADMIN"})
+    @Path("/{id}")
+    @Operation(summary = "Gets a user", description = "Retrieves a user by id")
+    @APIResponses(value = {
+            @APIResponse(responseCode = "200", description = "Success",
+                    content = @Content(mediaType = "application/json", schema = @Schema(implementation = User.class))),
+            @APIResponse(responseCode = "404", description="User not found",
+                    content = @Content(mediaType = "application/json", schema = @Schema(implementation = ExceptionHandler.class)))
+    })
+    public User getUser(@PathParam("id") int id) throws UserNotFoundException {
+        return userService.getUserById(id);
     }
 
 }
