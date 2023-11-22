@@ -78,13 +78,5 @@ public class SignUp {
         byte[] encryptedBytes = cipher.doFinal(text.getBytes(StandardCharsets.UTF_8));
         return Base64.getEncoder().encodeToString(encryptedBytes);
     }
-
-    private static String decrypt(String encryptedText, SecretKey secretKey) throws Exception {
-        Cipher cipher = Cipher.getInstance("AES");
-        cipher.init(Cipher.DECRYPT_MODE, secretKey);
-        byte[] encryptedBytes = Base64.getDecoder().decode(encryptedText);
-        byte[] decryptedBytes = cipher.doFinal(encryptedBytes);
-        return new String(decryptedBytes, StandardCharsets.UTF_8);
-    }
 }
 
