@@ -32,7 +32,7 @@ public class DefaultUserService implements UserService {
     @Transactional
     @Override
     public User addUser(User user) {
-        userRepository.persistAndFlush(user);
+        userRepository.persist(user);
         return user;
     }
 
@@ -48,7 +48,8 @@ public class DefaultUserService implements UserService {
         return u;
     }
     @Override
+    @Transactional
     public void deleteUser(int id) throws UserNotFoundException {
-
+        userRepository.delete(getUserById(id));
     }
 }

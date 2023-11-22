@@ -4,6 +4,7 @@ import jakarta.annotation.security.PermitAll;
 import jakarta.persistence.Entity;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotBlank;
+import jakarta.ws.rs.core.Response;
 import lombok.Getter;
 import lombok.Setter;
 import vn.edu.usth.service.UserService;
@@ -91,9 +92,18 @@ public class UserController {
             @APIResponse(responseCode = "404", description="User not found",
                     content = @Content(mediaType = MediaType.APPLICATION_JSON, schema = @Schema(implementation = ExceptionHandler.class)))
     })
-    public User addUser(CreateUser user) throws UserNotFoundException {
+    public User addUser(@Valid  CreateUser user) throws UserNotFoundException {
         return userService.addUser(user.toUser());
     }
+
+    @DELETE
+    @Path("/{id}")
+    //    @RolesAllowed({"USER", "ADMIN"})
+    public Response deleteUser(@PathParam("id") int id) throws UserNotFoundException{
+         userService.deleteUser(id);
+         return Response.status(Response.Status.NO_CONTENT).build();
+    }
+
 
     @Getter @Setter
     @Schema(name = "UserDTO", description = "create a user")
