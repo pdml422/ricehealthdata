@@ -1,0 +1,55 @@
+package vn.edu.usth.service.impl;
+
+import jakarta.transaction.Transactional;
+import vn.edu.usth.exception.UserNotFoundException;
+import vn.edu.usth.service.UserService;
+import vn.edu.usth.repository.UserRepository;
+
+import jakarta.enterprise.context.ApplicationScoped;
+import jakarta.inject.Inject;
+import vn.edu.usth.model.User;
+import java.util.List;
+@ApplicationScoped
+public class DefaultUserService implements UserService {
+    private final UserRepository userRepository;
+    @Inject
+    public DefaultUserService(UserRepository userRepository) {
+        this.userRepository = userRepository;
+    }
+    @Override
+    public User getUserById(int id) throws UserNotFoundException {
+        User user = userRepository.findById((long) id);
+        if (user == null) {
+            throw new UserNotFoundException("There user doesn't exits");
+        }
+        return user;
+    }
+
+    @Override
+    public List<User> getAllUsers() {
+        return userRepository.listAll();
+    }
+    @Transactional
+    @Override
+    public User addUser(User user) {
+        userRepository.persist(user);
+        return user;
+    }
+
+    @Transactional
+    @Override
+    public User updateUser(int id, User user) throws UserNotFoundException {
+        User u = getUserById(id);
+        u.setName(user.getName());
+        u.setEmail(user.getEmail());
+        u.setUsername(user.getUsername());
+        u.setPassword(user.getPassword());
+        u.setRole(user.getRole());
+        return u;
+    }
+    @Override
+    @Transactional
+    public void deleteUser(int id) throws UserNotFoundException {
+        userRepository.delete(getUserById(id));
+    }
+}
