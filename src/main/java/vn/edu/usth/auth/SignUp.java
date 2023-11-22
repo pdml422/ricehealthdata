@@ -6,9 +6,14 @@ import java.sql.Statement;
 import java.util.Scanner;
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
+import javax.crypto.Cipher;
+import javax.crypto.KeyGenerator;
+import javax.crypto.SecretKey;
+import java.nio.charset.StandardCharsets;
+import java.util.Base64;
 
 public class SignUp {
-    public static void main(String[] args){
+    public static void main(String[] args) throws Exception {
         String username, name, Email, Password, role, query;
         String SUrl, SUser, SPass;
         SUrl = "jdbc:mysql://100.96.184.148:3306/ricehealthdata";
@@ -20,7 +25,12 @@ public class SignUp {
 
         String email = signup.nextLine();
         String fname = signup.nextLine();
-        String password = signup.nextLine();
+        String originalText = signup.nextLine();
+
+        SecretKey secretKey = generateSecretKey();
+
+        // Encrypt the text
+        String password = encrypt(originalText, secretKey);
 
 
         try {
@@ -55,6 +65,26 @@ public class SignUp {
             System.out.println("Error!" + e.getMessage());
         }
 
-    }//GEN-LAST:event_SignUpBtnActionPerformed
+    }
+    private static SecretKey generateSecretKey() throws Exception {
+        KeyGenerator keyGenerator = KeyGenerator.getInstance("AES");
+        keyGenerator.init(128);
+        return keyGenerator.generateKey();
+    }
+
+    private static String encrypt(String text, SecretKey secretKey) throws Exception {
+        Cipher cipher = Cipher.getInstance("AES");
+        cipher.init(Cipher.ENCRYPT_MODE, secretKey);
+        byte[] encryptedBytes = cipher.doFinal(text.getBytes(StandardCharsets.UTF_8));
+        return Base64.getEncoder().encodeToString(encryptedBytes);
+    }
+
+    private static String decrypt(String encryptedText, SecretKey secretKey) throws Exception {
+        Cipher cipher = Cipher.getInstance("AES");
+        cipher.init(Cipher.DECRYPT_MODE, secretKey);
+        byte[] encryptedBytes = Base64.getDecoder().decode(encryptedText);
+        byte[] decryptedBytes = cipher.doFinal(encryptedBytes);
+        return new String(decryptedBytes, StandardCharsets.UTF_8);
+    }
 }
 
