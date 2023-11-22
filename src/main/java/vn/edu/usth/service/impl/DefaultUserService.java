@@ -1,5 +1,6 @@
 package vn.edu.usth.service.impl;
 
+import jakarta.transaction.Transactional;
 import vn.edu.usth.exception.UserNotFoundException;
 import vn.edu.usth.service.UserService;
 import vn.edu.usth.repository.UserRepository;
@@ -17,33 +18,37 @@ public class DefaultUserService implements UserService {
     }
     @Override
     public User getUserById(int id) throws UserNotFoundException {
-        return userRepository.findByIdOptional((long) id).orElseThrow(() -> new UserNotFoundException("There user doesn't exist"));
+        User user = userRepository.findById((long) id);
+        if (user == null) {
+            throw new UserNotFoundException("There user doesn't exits");
+        }
+        return user;
     }
+
     @Override
     public List<User> getAllUsers() {
         return userRepository.listAll();
     }
+    @Transactional
+    @Override
+    public User addUser(User user) {
+        userRepository.persistAndFlush(user);
+        return user;
+    }
 
+    @Transactional
     @Override
     public User updateUser(int id, User user) throws UserNotFoundException {
-        return null;
+        User u = getUserById(id);
+        u.setName(user.getName());
+        u.setEmail(user.getEmail());
+        u.setUsername(user.getUsername());
+        u.setPassword(user.getPassword());
+        u.setRole(user.getRole());
+        return u;
     }
-
-    @Override
-    public User saveUser(User user) {
-        return null;
-    }
-
     @Override
     public void deleteUser(int id) throws UserNotFoundException {
 
     }
-//    @Transactional
-//    @Override
-//    public User updateUser(long id, User user) throws UserNotFoundException {
-//        User existingUser = getUserById(id);
-//        existingUser.setName(user.getName());
-//        userRepository.persist(existingUser);
-//        return existingUser;
-//    }
 }

@@ -7,9 +7,9 @@ public interface UserService {
 
     List<User> getAllUsers();
 
-    User updateUser(int id, User user) throws UserNotFoundException;
+    User addUser(User user) throws UserNotFoundException;
 
-    User saveUser(User user);
+    User updateUser(int id, User user) throws UserNotFoundException;
 
     void deleteUser(int id) throws UserNotFoundException;
 }
