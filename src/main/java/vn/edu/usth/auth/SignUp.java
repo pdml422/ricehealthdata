@@ -78,5 +78,6 @@ public class SignUp {
         byte[] encryptedBytes = cipher.doFinal(text.getBytes(StandardCharsets.UTF_8));
         return Base64.getEncoder().encodeToString(encryptedBytes);
     }
+
 }
 
