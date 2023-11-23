@@ -5,6 +5,7 @@ import lombok.Getter;
 import lombok.Setter;
 
 import java.util.Objects;
+
 @Getter
 @Setter
 @Table(name = "user")
@@ -21,7 +22,7 @@ public class User {
     @Column(name = "username", nullable = false)
     private String username;
     @Basic
-    @Column(name = "password",nullable = false)
+    @Column(name = "password", nullable = false)
     private String password;
     @Basic
     @Column(name = "name", nullable = false)

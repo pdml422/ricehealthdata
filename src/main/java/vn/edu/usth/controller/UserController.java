@@ -40,18 +40,20 @@ public class UserController {
     public UserController(UserService userService) {
         this.userService = userService;
     }
+
     @GET
 //    @RolesAllowed({"USER", "ADMIN"})
     @Operation(summary = "Gets users", description = "Lists all available users")
     @APIResponses(value = {
             @APIResponse(responseCode = "200", description = "Success",
-            content = @Content(mediaType = MediaType.APPLICATION_JSON, schema = @Schema(implementation = User.class))),
-            @APIResponse(responseCode = "404" ,description = "Please insert user data",
-            content = @Content(mediaType = MediaType.APPLICATION_JSON, schema = @Schema(implementation = ExceptionHandler.class)))
+                    content = @Content(mediaType = MediaType.APPLICATION_JSON, schema = @Schema(implementation = User.class))),
+            @APIResponse(responseCode = "500", description = "Please insert user data",
+                    content = @Content(mediaType = MediaType.APPLICATION_JSON, schema = @Schema(implementation = ExceptionHandler.class)))
     })
     public List<User> getUsers() {
         return userService.getAllUsers();
     }
+
     @GET
 //    @RolesAllowed({"USER", "ADMIN"})
     @Path("/{id}")
@@ -59,23 +61,24 @@ public class UserController {
     @APIResponses(value = {
             @APIResponse(responseCode = "200", description = "Success",
                     content = @Content(mediaType = MediaType.APPLICATION_JSON, schema = @Schema(implementation = User.class))),
-            @APIResponse(responseCode = "404", description="User not found",
+            @APIResponse(responseCode = "404", description = "User not found",
                     content = @Content(mediaType = MediaType.APPLICATION_JSON, schema = @Schema(implementation = ExceptionHandler.class)))
     })
     public User getUser(@PathParam("id") int id) throws UserNotFoundException {
         return userService.getUserById(id);
     }
+
     @PUT
 //    @RolesAllowed({"USER", "ADMIN"})
     @Path("/{id}")
     @Operation(summary = "Update a user", description = "Update a user by id")
     @APIResponses(value = {
             @APIResponse(responseCode = "200", description = "Success",
-            content = @Content(mediaType = MediaType.APPLICATION_JSON, schema = @Schema(implementation = User.class))),
-            @APIResponse(responseCode = "404", description="User not found",
+                    content = @Content(mediaType = MediaType.APPLICATION_JSON, schema = @Schema(implementation = User.class))),
+            @APIResponse(responseCode = "404", description = "User not found",
                     content = @Content(mediaType = MediaType.APPLICATION_JSON, schema = @Schema(implementation = ExceptionHandler.class)))
     })
-  public User updateUser(@PathParam("id") int id, @Valid CreateUser createUser) throws UserNotFoundException {
+    public User updateUser(@PathParam("id") int id, @Valid CreateUser createUser) throws UserNotFoundException {
         if (userService != null && createUser != null) {
             return userService.updateUser(id, createUser.toUser());
         } else {
@@ -89,23 +92,24 @@ public class UserController {
     @APIResponses(value = {
             @APIResponse(responseCode = "200", description = "Success",
                     content = @Content(mediaType = MediaType.APPLICATION_JSON, schema = @Schema(implementation = User.class))),
-            @APIResponse(responseCode = "404", description="User not found",
+            @APIResponse(responseCode = "404", description = "User not found",
                     content = @Content(mediaType = MediaType.APPLICATION_JSON, schema = @Schema(implementation = ExceptionHandler.class)))
     })
-    public User addUser(@Valid  CreateUser user) throws UserNotFoundException {
+    public User addUser(@Valid CreateUser user) throws UserNotFoundException {
         return userService.addUser(user.toUser());
     }
 
     @DELETE
     @Path("/{id}")
     //    @RolesAllowed({"USER", "ADMIN"})
-    public Response deleteUser(@PathParam("id") int id) throws UserNotFoundException{
-         userService.deleteUser(id);
-         return Response.status(Response.Status.NO_CONTENT).build();
+    public Response deleteUser(@PathParam("id") int id) throws UserNotFoundException {
+        userService.deleteUser(id);
+        return Response.status(Response.Status.OK).build();
     }
 
 
-    @Getter @Setter
+    @Getter
+    @Setter
     @Schema(name = "UserDTO", description = "create a user")
     public static class CreateUser {
         @NotBlank

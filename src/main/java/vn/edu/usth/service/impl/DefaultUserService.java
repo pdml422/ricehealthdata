@@ -8,14 +8,18 @@ import vn.edu.usth.repository.UserRepository;
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.inject.Inject;
 import vn.edu.usth.model.User;
+
 import java.util.List;
+
 @ApplicationScoped
 public class DefaultUserService implements UserService {
     private final UserRepository userRepository;
+
     @Inject
     public DefaultUserService(UserRepository userRepository) {
         this.userRepository = userRepository;
     }
+
     @Override
     public User getUserById(int id) throws UserNotFoundException {
         User user = userRepository.findById((long) id);
@@ -29,6 +33,7 @@ public class DefaultUserService implements UserService {
     public List<User> getAllUsers() {
         return userRepository.listAll();
     }
+
     @Transactional
     @Override
     public User addUser(User user) {
@@ -47,6 +52,7 @@ public class DefaultUserService implements UserService {
         u.setRole(user.getRole());
         return u;
     }
+
     @Override
     @Transactional
     public void deleteUser(int id) throws UserNotFoundException {
