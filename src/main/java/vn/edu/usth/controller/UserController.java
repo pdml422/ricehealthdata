@@ -7,6 +7,7 @@ import jakarta.validation.constraints.NotBlank;
 import jakarta.ws.rs.core.Response;
 import lombok.Getter;
 import lombok.Setter;
+import vn.edu.usth.model.Role;
 import vn.edu.usth.service.UserService;
 import vn.edu.usth.model.User;
 import vn.edu.usth.exception.UserNotFoundException;
@@ -124,16 +125,12 @@ public class UserController {
         @NotBlank
         @Schema(name = "name", required = true)
         private String name;
-        @NotBlank
-        @Schema(name = "role")
-        private String role;
 
         public User toUser() {
             User user = new User();
             user.setName(name);
             user.setEmail(email);
             user.setPassword(password);
-            user.setRole(role);
             user.setUsername(name);
             return user;
         }
