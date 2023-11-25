@@ -121,7 +121,7 @@ public class UserController {
             user.setEmail(email);
             user.setPassword(password);
             user.setRole(role);
-            user.setUsername(name);
+            user.setUsername(username);
             return user;
         }
     }

@@ -8,12 +8,15 @@ import vn.edu.usth.repository.UserRepository;
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.inject.Inject;
 import vn.edu.usth.model.User;
+import vn.edu.usth.util.PBKDF2Encoder;
 
 import java.util.List;
 
 @ApplicationScoped
 public class DefaultUserService implements UserService {
     private final UserRepository userRepository;
+    @Inject
+    PBKDF2Encoder passwordEncoder;
 
     @Inject
     public DefaultUserService(UserRepository userRepository) {
@@ -48,7 +51,7 @@ public class DefaultUserService implements UserService {
         u.setName(user.getName());
         u.setEmail(user.getEmail());
         u.setUsername(user.getUsername());
-        u.setPassword(user.getPassword());
+        u.setPassword(passwordEncoder.encode(user.getPassword()));
         u.setRole(user.getRole());
         return u;
     }
