@@ -26,6 +26,7 @@ import jakarta.enterprise.context.RequestScoped;
 import jakarta.inject.Inject;
 import jakarta.ws.rs.*;
 import jakarta.ws.rs.core.MediaType;
+import vn.edu.usth.tdo.UserTdo;
 
 import java.util.List;
 
@@ -79,9 +80,9 @@ public class UserController {
             @APIResponse(responseCode = "404", description = "User not found",
                     content = @Content(mediaType = MediaType.APPLICATION_JSON, schema = @Schema(implementation = ExceptionHandler.class)))
     })
-    public User updateUser(@PathParam("id") int id, @Valid CreateUser createUser) throws UserNotFoundException {
-        if (userService != null && createUser != null) {
-            return userService.updateUser(id, createUser.toUser());
+    public User updateUser(@PathParam("id") int id, @Valid UserTdo userTdo) throws UserNotFoundException {
+        if (userService != null && userTdo != null) {
+            return userService.updateUser(id, userTdo.toUser());
         } else {
             throw new IllegalArgumentException("userService or create user is null");
         }
@@ -95,34 +96,5 @@ public class UserController {
         return Response.status(Response.Status.OK).build();
     }
 
-    @Getter
-    @Setter
-    @Schema(name = "UserDTO", description = "create a user")
-    public static class CreateUser {
-        @NotBlank
-        @Schema(name = "email", required = true)
-        private String email;
-        @NotBlank
-        @Schema(name = "username", required = true)
-        private String username;
-        @NotBlank
-        @Schema(name = "password", required = true)
-        private String password;
-        @NotBlank
-        @Schema(name = "name", required = true)
-        private String name;
-        @NotBlank
-        @Schema(name = "role")
-        private String role;
 
-        public User toUser() {
-            User user = new User();
-            user.setName(name);
-            user.setEmail(email);
-            user.setPassword(password);
-            user.setRole(role);
-            user.setUsername(username);
-            return user;
-        }
-    }
 }
