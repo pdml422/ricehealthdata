@@ -14,8 +14,4 @@ public class UserRepository implements PanacheRepository<User> {
         return find("username", username).firstResult();
     }
 
-    public User findByEmail(String email) {
-        return find("email", email).firstResult();
-    }
-
 }

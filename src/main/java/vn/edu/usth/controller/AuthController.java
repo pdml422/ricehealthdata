@@ -25,7 +25,7 @@ public class AuthController {
     @Inject
     UserRepository userRepository;
 
-    @ConfigProperty(name = "com.example.demo.jwt.duration") public Long duration;
+    @ConfigProperty(name = "vn.edu.usth.ricehealthdata.jwt.duration") public Long duration;
     @ConfigProperty(name = "mp.jwt.verify.issuer") public String issuer;
 
     @PermitAll
@@ -53,11 +53,6 @@ public class AuthController {
         if (userRepository.findByUsername(registerRequest.username) != null) {
             throw new Exception("Username already exists");
         }
-
-        if (userRepository.findByEmail(registerRequest.email) != null) {
-            throw new Exception("Email already exists");
-        }
-
 
         User newUser = new User();
         newUser.setUsername(registerRequest.username);
