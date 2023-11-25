@@ -1,5 +1,6 @@
 package vn.edu.usth.controller;
 
+import io.quarkus.elytron.security.common.BcryptUtil;
 import jakarta.annotation.security.PermitAll;
 import jakarta.persistence.Entity;
 import jakarta.validation.Valid;
@@ -42,7 +43,7 @@ public class UserController {
     }
 
     @GET
-//    @RolesAllowed({"USER", "ADMIN"})
+    @RolesAllowed({"ADMIN"})
     @Operation(summary = "Gets users", description = "Lists all available users")
     @APIResponses(value = {
             @APIResponse(responseCode = "200", description = "Success",
@@ -55,7 +56,7 @@ public class UserController {
     }
 
     @GET
-//    @RolesAllowed({"USER", "ADMIN"})
+    @RolesAllowed({"ADMIN"})
     @Path("/{id}")
     @Operation(summary = "Gets a user", description = "Retrieves a user by id")
     @APIResponses(value = {
@@ -69,7 +70,7 @@ public class UserController {
     }
 
     @PUT
-//    @RolesAllowed({"USER", "ADMIN"})
+    @RolesAllowed({"ADMIN"})
     @Path("/{id}")
     @Operation(summary = "Update a user", description = "Update a user by id")
     @APIResponses(value = {
@@ -86,27 +87,13 @@ public class UserController {
         }
     }
 
-    @POST
-    @PermitAll
-    @Operation(summary = "Add a user", description = "create a user and add persists into database")
-    @APIResponses(value = {
-            @APIResponse(responseCode = "200", description = "Success",
-                    content = @Content(mediaType = MediaType.APPLICATION_JSON, schema = @Schema(implementation = User.class))),
-            @APIResponse(responseCode = "404", description = "User not found",
-                    content = @Content(mediaType = MediaType.APPLICATION_JSON, schema = @Schema(implementation = ExceptionHandler.class)))
-    })
-    public User addUser(@Valid CreateUser user) throws UserNotFoundException {
-        return userService.addUser(user.toUser());
-    }
-
     @DELETE
     @Path("/{id}")
-    //    @RolesAllowed({"USER", "ADMIN"})
+    @RolesAllowed({"ADMIN"})
     public Response deleteUser(@PathParam("id") int id) throws UserNotFoundException {
         userService.deleteUser(id);
         return Response.status(Response.Status.OK).build();
     }
-
 
     @Getter
     @Setter
