@@ -1,8 +1,8 @@
-package vn.edu.usth.service.impl;
+package vn.edu.usth.service.user;
 
 import jakarta.transaction.Transactional;
 import vn.edu.usth.exception.UserNotFoundException;
-import vn.edu.usth.service.UserService;
+import vn.edu.usth.service.user.UserService;
 import vn.edu.usth.repository.UserRepository;
 
 import jakarta.enterprise.context.ApplicationScoped;

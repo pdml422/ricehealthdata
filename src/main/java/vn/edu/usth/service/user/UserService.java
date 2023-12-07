@@ -1,4 +1,4 @@
-package vn.edu.usth.service;
+package vn.edu.usth.service.user;
 
 import java.util.List;
 

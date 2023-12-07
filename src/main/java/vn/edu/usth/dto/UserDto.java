@@ -1,4 +1,4 @@
-package vn.edu.usth.tdo;
+package vn.edu.usth.dto;
 
 import jakarta.validation.constraints.NotBlank;
 import lombok.Getter;
@@ -9,7 +9,7 @@ import vn.edu.usth.model.User;
 @Getter
 @Setter
 @Schema(name = "UserDTO", description = "create a user")
-public class UserTdo {
+public class UserDto {
     @NotBlank
     @Schema(name = "email", required = true)
     private String email;

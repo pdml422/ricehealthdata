@@ -1,4 +1,4 @@
-package vn.edu.usth.exceptionhandler;
+package vn.edu.usth.exception;
 
 import vn.edu.usth.exception.UserNotFoundException;
 import jakarta.ws.rs.core.Response;

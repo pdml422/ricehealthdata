@@ -1,17 +1,11 @@
 package vn.edu.usth.controller;
 
-import io.quarkus.elytron.security.common.BcryptUtil;
-import jakarta.annotation.security.PermitAll;
-import jakarta.persistence.Entity;
 import jakarta.validation.Valid;
-import jakarta.validation.constraints.NotBlank;
 import jakarta.ws.rs.core.Response;
-import lombok.Getter;
-import lombok.Setter;
-import vn.edu.usth.service.UserService;
+import vn.edu.usth.service.user.UserService;
 import vn.edu.usth.model.User;
 import vn.edu.usth.exception.UserNotFoundException;
-import vn.edu.usth.exceptionhandler.ExceptionHandler;
+import vn.edu.usth.exception.ExceptionHandler;
 import org.eclipse.microprofile.openapi.annotations.media.Content;
 import org.eclipse.microprofile.openapi.annotations.media.Schema;
 import org.eclipse.microprofile.openapi.annotations.security.SecurityScheme;
@@ -26,7 +20,7 @@ import jakarta.enterprise.context.RequestScoped;
 import jakarta.inject.Inject;
 import jakarta.ws.rs.*;
 import jakarta.ws.rs.core.MediaType;
-import vn.edu.usth.tdo.UserTdo;
+import vn.edu.usth.dto.UserDto;
 
 import java.util.List;
 
@@ -80,9 +74,9 @@ public class UserController {
             @APIResponse(responseCode = "404", description = "User not found",
                     content = @Content(mediaType = MediaType.APPLICATION_JSON, schema = @Schema(implementation = ExceptionHandler.class)))
     })
-    public User updateUser(@PathParam("id") int id, @Valid UserTdo userTdo) throws UserNotFoundException {
-        if (userService != null && userTdo != null) {
-            return userService.updateUser(id, userTdo.toUser());
+    public User updateUser(@PathParam("id") int id, @Valid UserDto userDto) throws UserNotFoundException {
+        if (userService != null && userDto != null) {
+            return userService.updateUser(id, userDto.toUser());
         } else {
             throw new IllegalArgumentException("userService or create user is null");
         }
