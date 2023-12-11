@@ -48,10 +48,8 @@ public class DefaultUserService implements UserService {
     @Override
     public User updateUser(int id, User user) throws UserNotFoundException {
         User u = getUserById(id);
-        u.setName(user.getName());
         u.setEmail(user.getEmail());
-        u.setUsername(user.getUsername());
-        u.setPassword(passwordEncoder.encode(user.getPassword()));
+        u.setName(user.getName());
         u.setRole(user.getRole());
         return u;
     }
