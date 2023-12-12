@@ -4,8 +4,6 @@ import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
 
-import java.sql.Date;
-
 @Entity
 @Getter
 @Setter
@@ -50,10 +48,10 @@ public class Statistical {
     private Double digesion;
     @Basic
     @Column(name = "date")
-    private Date date;
+    private String date;
     @Basic
-    @Column(name = "sub-replicate")
-    private int subReplicate;
+    @Column(name = "subReplicate")
+    private String subReplicate;
 
 
 }

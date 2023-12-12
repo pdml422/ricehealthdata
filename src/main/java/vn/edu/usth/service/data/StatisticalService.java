@@ -3,9 +3,9 @@ package vn.edu.usth.service.data;
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.inject.Inject;
 import vn.edu.usth.model.Statistical;
+import vn.edu.usth.payload.SearchStatistical;
 import vn.edu.usth.repository.StatisticalRepository;
 
-import java.util.Date;
 import java.util.List;
 
 @ApplicationScoped
@@ -16,4 +16,7 @@ public class StatisticalService {
         this.statisticalRepository = statisticalRepository;
     }
 
+    public List<Statistical> search(SearchStatistical searchStatistical) {
+        return statisticalRepository.search(searchStatistical);
+    }
 }
