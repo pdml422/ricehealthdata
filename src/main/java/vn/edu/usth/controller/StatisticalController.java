@@ -13,10 +13,10 @@ import org.eclipse.microprofile.openapi.annotations.parameters.RequestBody;
 import org.eclipse.microprofile.openapi.annotations.responses.APIResponse;
 import org.eclipse.microprofile.openapi.annotations.responses.APIResponses;
 import org.eclipse.microprofile.openapi.annotations.security.SecurityScheme;
-import vn.edu.usth.exception.ExceptionHandler;
+import vn.edu.usth.exception.ExceptionDataHandler;
 import vn.edu.usth.model.Statistical;
 import vn.edu.usth.payload.SearchStatistical;
-import vn.edu.usth.service.data.StatisticalService;
+import vn.edu.usth.service.data.DefaultStatisticalService;
 
 import java.util.List;
 
@@ -26,10 +26,10 @@ import java.util.List;
 @Consumes(MediaType.APPLICATION_JSON)
 @SecurityScheme(securitySchemeName = "Basic Auth", type = SecuritySchemeType.HTTP, scheme = "basic")
 public class StatisticalController {
-    private final StatisticalService statisticalService;
+    private final DefaultStatisticalService statisticalService;
 
     @Inject
-    public StatisticalController(StatisticalService statisticalService) {
+    public StatisticalController(DefaultStatisticalService statisticalService) {
         this.statisticalService = statisticalService;
     }
 
@@ -41,7 +41,7 @@ public class StatisticalController {
             @APIResponse(responseCode = "200", description = "Success",
                     content = @Content(mediaType = MediaType.APPLICATION_JSON, schema = @Schema(implementation = Statistical.class))),
             @APIResponse(responseCode = "404", description = "Statistic data not found !",
-                    content = @Content(mediaType = MediaType.APPLICATION_JSON, schema = @Schema(implementation = ExceptionHandler.class)))
+                    content = @Content(mediaType = MediaType.APPLICATION_JSON, schema = @Schema(implementation = ExceptionDataHandler.class)))
     })
     public List<Statistical> search(@RequestBody SearchStatistical searchStatistical) {
         return statisticalService.search(searchStatistical);
