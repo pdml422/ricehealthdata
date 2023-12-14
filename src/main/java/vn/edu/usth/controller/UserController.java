@@ -1,11 +1,12 @@
 package vn.edu.usth.controller;
 
+import jakarta.annotation.security.RolesAllowed;
 import jakarta.validation.Valid;
 import jakarta.ws.rs.core.Response;
 import vn.edu.usth.service.user.UserService;
 import vn.edu.usth.model.User;
 import vn.edu.usth.exception.UserNotFoundException;
-import vn.edu.usth.exception.ExceptionHandler;
+import vn.edu.usth.exception.ExceptionUserHandler;
 import org.eclipse.microprofile.openapi.annotations.media.Content;
 import org.eclipse.microprofile.openapi.annotations.media.Schema;
 import org.eclipse.microprofile.openapi.annotations.security.SecurityScheme;
@@ -15,7 +16,6 @@ import org.eclipse.microprofile.openapi.annotations.responses.APIResponse;
 import org.eclipse.microprofile.openapi.annotations.responses.APIResponses;
 
 
-import jakarta.annotation.security.RolesAllowed;
 import jakarta.enterprise.context.RequestScoped;
 import jakarta.inject.Inject;
 import jakarta.ws.rs.*;
@@ -44,7 +44,7 @@ public class UserController {
             @APIResponse(responseCode = "200", description = "Success",
                     content = @Content(mediaType = MediaType.APPLICATION_JSON, schema = @Schema(implementation = User.class))),
             @APIResponse(responseCode = "500", description = "Please insert user data",
-                    content = @Content(mediaType = MediaType.APPLICATION_JSON, schema = @Schema(implementation = ExceptionHandler.class)))
+                    content = @Content(mediaType = MediaType.APPLICATION_JSON, schema = @Schema(implementation = ExceptionUserHandler.class)))
     })
     public List<User> getUsers() {
         return userService.getAllUsers();
@@ -58,7 +58,7 @@ public class UserController {
             @APIResponse(responseCode = "200", description = "Success",
                     content = @Content(mediaType = MediaType.APPLICATION_JSON, schema = @Schema(implementation = User.class))),
             @APIResponse(responseCode = "404", description = "User not found",
-                    content = @Content(mediaType = MediaType.APPLICATION_JSON, schema = @Schema(implementation = ExceptionHandler.class)))
+                    content = @Content(mediaType = MediaType.APPLICATION_JSON, schema = @Schema(implementation = ExceptionUserHandler.class)))
     })
     public User getUser(@PathParam("id") int id) throws UserNotFoundException {
         return userService.getUserById(id);
@@ -72,7 +72,7 @@ public class UserController {
             @APIResponse(responseCode = "200", description = "Success",
                     content = @Content(mediaType = MediaType.APPLICATION_JSON, schema = @Schema(implementation = User.class))),
             @APIResponse(responseCode = "404", description = "User not found",
-                    content = @Content(mediaType = MediaType.APPLICATION_JSON, schema = @Schema(implementation = ExceptionHandler.class)))
+                    content = @Content(mediaType = MediaType.APPLICATION_JSON, schema = @Schema(implementation = ExceptionUserHandler.class)))
     })
     public User updateUser(@PathParam("id") int id, @Valid UserDto userDto) throws UserNotFoundException {
         if (userService != null && userDto != null) {
