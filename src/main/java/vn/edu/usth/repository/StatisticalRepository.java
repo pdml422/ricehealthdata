@@ -14,7 +14,7 @@ import java.util.Map;
 public class StatisticalRepository implements PanacheRepository<Statistical> {
 
     public List<Statistical> search(SearchStatistical searchStatistical) {
-Map<String, Object> params = new HashMap<>();
+        Map<String, Object> params = new HashMap<>();
         StringBuilder query = new StringBuilder("SELECT s FROM Statistical s WHERE 1=1");
         if (searchStatistical.getReplicate() != null) {
             query.append(" AND s.replicate = :replicate");

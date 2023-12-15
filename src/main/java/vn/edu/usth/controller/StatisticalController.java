@@ -16,7 +16,7 @@ import org.eclipse.microprofile.openapi.annotations.security.SecurityScheme;
 import vn.edu.usth.exception.ExceptionDataHandler;
 import vn.edu.usth.model.Statistical;
 import vn.edu.usth.payload.SearchStatistical;
-import vn.edu.usth.service.data.DefaultStatisticalService;
+import vn.edu.usth.service.data.StatisticalService;
 
 import java.util.List;
 
@@ -26,10 +26,10 @@ import java.util.List;
 @Consumes(MediaType.APPLICATION_JSON)
 @SecurityScheme(securitySchemeName = "Basic Auth", type = SecuritySchemeType.HTTP, scheme = "basic")
 public class StatisticalController {
-    private final DefaultStatisticalService statisticalService;
+    private final StatisticalService statisticalService;
 
     @Inject
-    public StatisticalController(DefaultStatisticalService statisticalService) {
+    public StatisticalController(StatisticalService statisticalService) {
         this.statisticalService = statisticalService;
     }
 
