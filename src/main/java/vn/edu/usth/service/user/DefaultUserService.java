@@ -27,7 +27,7 @@ public class DefaultUserService implements UserService {
     public User getUserById(int id) throws UserNotFoundException {
         User user = userRepository.findById((long) id);
         if (user == null) {
-            throw new UserNotFoundException("There user doesn't exits");
+            throw new UserNotFoundException("User doesn't exist");
         }
         return user;
     }
