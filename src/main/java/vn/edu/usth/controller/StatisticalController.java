@@ -55,6 +55,23 @@ public class StatisticalController {
         return statisticalService.search(searchStatistical);
     }
 
+    @GET
+    @RolesAllowed({"USER"})
+    @Path("/searchAll")
+    @Operation(summary = "Gets all statistic data", description = "Retrieves all statistic data")
+    @APIResponses(value = {
+            @APIResponse(responseCode = "200", description = "Success",
+                    content = @Content(mediaType = MediaType.APPLICATION_JSON, schema = @Schema(implementation = Statistical.class))),
+            @APIResponse(responseCode = "404", description = "Statistic data not found !",
+                    content = @Content(mediaType = MediaType.APPLICATION_JSON, schema = @Schema(implementation = ExceptionDataHandler.class)))
+    })
+    public List<Statistical> searchAll() throws DataNotFoundException {
+        if (statisticalService.searchAll().isEmpty()) {
+            throw new DataNotFoundException("Data not found");
+        }
+        return statisticalService.searchAll();
+    }
+
     @RolesAllowed({"USER"})
     @POST
     @Path("/create") @Produces(MediaType.APPLICATION_JSON)

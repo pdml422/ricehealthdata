@@ -32,4 +32,8 @@ public class StatisticalRepository implements PanacheRepository<Statistical> {
         return panacheQuery.list();
 
     }
+
+    public List<Statistical> searchAll() {
+        return this.listAll();
+    }
 }

@@ -22,6 +22,10 @@ public class StatisticalService {
         return statisticalRepository.search(searchStatistical);
     }
 
+    public List<Statistical> searchAll() {
+        return statisticalRepository.searchAll();
+    }
+
     public Statistical getDataById(int id) throws DataNotFoundException {
         Statistical statistical = statisticalRepository.findById((long) id);
         if (statistical == null) {
