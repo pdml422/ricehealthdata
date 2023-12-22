@@ -14,5 +14,6 @@ public class StatisticalRequest {
     public Double driedWeight;
     public Double moiture;
     public Double digesion;
+    public int userId;
 
 }

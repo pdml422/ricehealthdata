@@ -48,11 +48,11 @@ public class StatisticalController {
             @APIResponse(responseCode = "404", description = "Statistic data not found !",
                     content = @Content(mediaType = MediaType.APPLICATION_JSON, schema = @Schema(implementation = ExceptionDataHandler.class)))
     })
-    public List<Statistical> search(@RequestBody SearchStatistical searchStatistical) throws DataNotFoundException {
-        if (statisticalService.search(searchStatistical).isEmpty()) {
+    public List<Statistical> search(@RequestBody SearchStatistical searchStatistical, @HeaderParam("userId") int userId) throws DataNotFoundException {
+        if (statisticalService.search(searchStatistical, userId).isEmpty()) {
             throw new DataNotFoundException("Data not found");
         }
-        return statisticalService.search(searchStatistical);
+        return statisticalService.search(searchStatistical, userId);
     }
 
     @GET
@@ -65,23 +65,23 @@ public class StatisticalController {
             @APIResponse(responseCode = "404", description = "Statistic data not found !",
                     content = @Content(mediaType = MediaType.APPLICATION_JSON, schema = @Schema(implementation = ExceptionDataHandler.class)))
     })
-    public List<Statistical> searchAll() throws DataNotFoundException {
-        if (statisticalService.searchAll().isEmpty()) {
+    public List<Statistical> searchAll(@HeaderParam("userId") int userId) throws DataNotFoundException {
+        if (statisticalService.searchAll(userId).isEmpty()) {
             throw new DataNotFoundException("Data not found");
         }
-        return statisticalService.searchAll();
+        return statisticalService.searchAll(userId);
     }
 
     @RolesAllowed({"USER"})
     @POST
     @Path("/create") @Produces(MediaType.APPLICATION_JSON)
-    public Statistical addData(StatisticalRequest request) throws Exception {
+    public Statistical addData(@RequestBody StatisticalRequest request, @HeaderParam("userId") int userId) throws Exception {
         SearchStatistical search = new SearchStatistical();
         search.setReplicate(request.replicate);
         search.setSubReplicate(request.subReplicate);
         search.setDate(request.date);
 
-        if (!statisticalService.search(search).isEmpty()) {
+        if (!statisticalService.search(search, userId).isEmpty()) {
             throw new Exception("Data already exists");
         }
 
@@ -99,6 +99,7 @@ public class StatisticalController {
         newStatistical.setDriedWeight(request.driedWeight);
         newStatistical.setMoiture(request.moiture);
         newStatistical.setDigesion(request.digesion);
+        newStatistical.setUserId(request.userId);
 
         return statisticalService.addData(newStatistical);
     }

@@ -52,6 +52,9 @@ public class Statistical {
     @Basic
     @Column(name = "subReplicate")
     private String subReplicate;
+    @Basic
+    @Column(name = "userId")
+    private int userId;
 
 
 }

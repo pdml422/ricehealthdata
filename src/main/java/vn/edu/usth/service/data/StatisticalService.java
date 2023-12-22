@@ -18,12 +18,12 @@ public class StatisticalService {
         this.statisticalRepository = statisticalRepository;
     }
 
-    public List<Statistical> search(SearchStatistical searchStatistical) {
-        return statisticalRepository.search(searchStatistical);
+    public List<Statistical> search(SearchStatistical searchStatistical, int userId) {
+        return statisticalRepository.search(searchStatistical, userId);
     }
 
-    public List<Statistical> searchAll() {
-        return statisticalRepository.searchAll();
+    public List<Statistical> searchAll(int userId) {
+        return statisticalRepository.searchAll(userId);
     }
 
     public Statistical getDataById(int id) throws DataNotFoundException {

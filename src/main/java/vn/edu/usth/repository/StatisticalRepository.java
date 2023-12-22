@@ -13,9 +13,10 @@ import java.util.Map;
 @ApplicationScoped
 public class StatisticalRepository implements PanacheRepository<Statistical> {
 
-    public List<Statistical> search(SearchStatistical searchStatistical) {
+    public List<Statistical> search(SearchStatistical searchStatistical, int userId) {
         Map<String, Object> params = new HashMap<>();
-        StringBuilder query = new StringBuilder("SELECT s FROM Statistical s WHERE 1=1");
+        StringBuilder query = new StringBuilder("SELECT s FROM Statistical s WHERE s.userId = :userId");
+        params.put("userId", userId);
         if (searchStatistical.getReplicate() != null) {
             query.append(" AND s.replicate = :replicate");
             params.put("replicate", searchStatistical.getReplicate());
@@ -33,7 +34,12 @@ public class StatisticalRepository implements PanacheRepository<Statistical> {
 
     }
 
-    public List<Statistical> searchAll() {
-        return this.listAll();
+    public List<Statistical> searchAll(int userId) {
+        Map<String, Object> params = new HashMap<>();
+        StringBuilder query = new StringBuilder("SELECT s FROM Statistical s WHERE s.userId = :userId");
+        params.put("userId", userId);
+        PanacheQuery<Statistical> panacheQuery = this.find(query.toString(), params);
+        return panacheQuery.list();
+
     }
 }
