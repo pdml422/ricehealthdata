@@ -2,7 +2,9 @@ package vn.edu.usth.controller;
 
 import jakarta.annotation.security.RolesAllowed;
 import jakarta.validation.Valid;
+import jakarta.ws.rs.core.Context;
 import jakarta.ws.rs.core.Response;
+import jakarta.ws.rs.core.SecurityContext;
 import vn.edu.usth.service.user.UserService;
 import vn.edu.usth.model.User;
 import vn.edu.usth.exception.UserNotFoundException;
@@ -62,6 +64,21 @@ public class UserController {
     })
     public User getUser(@PathParam("id") int id) throws UserNotFoundException {
         return userService.getUserById(id);
+    }
+
+    @GET
+    @RolesAllowed({"USER"})
+    @Path("/me")
+    @Operation(summary = "Gets current user", description = "Retrieves the currently authenticated user")
+    @APIResponses(value = {
+            @APIResponse(responseCode = "200", description = "Success",
+                    content = @Content(mediaType = MediaType.APPLICATION_JSON, schema = @Schema(implementation = User.class))),
+            @APIResponse(responseCode = "404", description = "User not found",
+                    content = @Content(mediaType = MediaType.APPLICATION_JSON, schema = @Schema(implementation = ExceptionUserHandler.class)))
+    })
+    public User getCurrentUser(@Context SecurityContext securityContext) throws UserNotFoundException {
+        String username = securityContext.getUserPrincipal().getName();
+        return userService.getUserByUsername(username);
     }
 
     @PUT

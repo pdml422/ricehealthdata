@@ -2,7 +2,6 @@ package vn.edu.usth.service.user;
 
 import jakarta.transaction.Transactional;
 import vn.edu.usth.exception.UserNotFoundException;
-import vn.edu.usth.service.user.UserService;
 import vn.edu.usth.repository.UserRepository;
 
 import jakarta.enterprise.context.ApplicationScoped;
@@ -35,6 +34,14 @@ public class DefaultUserService implements UserService {
     @Override
     public List<User> getAllUsers() {
         return userRepository.listAll();
+    }
+
+    public User getUserByUsername(String username) throws UserNotFoundException {
+        User user = userRepository.findByUsername(username);
+        if (user == null) {
+            throw new UserNotFoundException("User not found with username: " + username);
+        }
+        return user;
     }
 
     @Transactional

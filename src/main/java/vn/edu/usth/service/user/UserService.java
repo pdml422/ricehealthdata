@@ -10,6 +10,8 @@ public interface UserService {
 
     List<User> getAllUsers();
 
+    User getUserByUsername(String username) throws UserNotFoundException;
+
     User addUser(User user) throws UserNotFoundException;
 
     User updateUser(int id, User user) throws UserNotFoundException;
