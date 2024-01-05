@@ -2,6 +2,7 @@ package vn.edu.usth.controller;
 
 import io.quarkus.logging.Log;
 import jakarta.annotation.security.PermitAll;
+import jakarta.annotation.security.RolesAllowed;
 import jakarta.enterprise.context.RequestScoped;
 import jakarta.inject.Inject;
 import jakarta.ws.rs.*;
@@ -32,20 +33,22 @@ public class ImageController {
         this.imageService = imageService;
     }
 
-    @GET
-    @PermitAll
+    @POST
+    @RolesAllowed({"USER"})
     @Path("/rgb")
-    public Response getImageRGBFromHyper(@RequestBody ImageRGBFromHyper request) {
+    public Response getImageRGBFromHyper(@RequestBody ImageRGBFromHyper request) throws IOException {
         String filePath = "src/main/resources/Image/Output/" +
                 "hyper_" + request.id + "_" + request.red + "_" + request.green + "_" + request.blue + ".png";
         if (Files.exists(Paths.get(filePath))) {
-            return Response.ok(filePath).build();
+            return Response.ok("http://100.96.184.148:8888/src/main/resources/Image/Output/" +
+                    "hyper_" + request.id + "_" + request.red + "_" + request.green + "_" + request.blue + ".png").build();
         }
+        Process p = Runtime.getRuntime().exec("python -m http.server 8888");
         return Response.ok(imageService.getImageRGBFromHyper(request)).build();
     }
 
     @GET
-    @PermitAll
+    @RolesAllowed({"USER"})
     @Path("/map/{id}")
     public Response getMapPoint(@PathParam("id") int id) {
         return Response.ok(imageService.getMapPointFromImageId(id)).build();

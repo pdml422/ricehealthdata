@@ -32,7 +32,7 @@ def hyperToRGB(id, hdr_path, red, green, blue):
 
     cv2.imwrite(f'src/main/resources/Image/Output/hyper_{id}_{red_band_index}_{green_band_index}_{blue_band_index}.png', rgb_image)
 
-    print(f'./Image/Output/hyper_{id}_{red_band_index}_{green_band_index}_{blue_band_index}.png')
+    print(f'http://100.96.184.148:8888/src/main/resources/Image/Output/hyper_{id}_{red_band_index}_{green_band_index}_{blue_band_index}.png')
 
 
 if __name__ == '__main__':
