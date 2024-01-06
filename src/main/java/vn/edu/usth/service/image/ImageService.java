@@ -2,10 +2,12 @@ package vn.edu.usth.service.image;
 
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.inject.Inject;
+import jakarta.transaction.Transactional;
+import vn.edu.usth.exception.DataNotFoundException;
 import vn.edu.usth.model.Image;
-import vn.edu.usth.model.Map;
+import vn.edu.usth.model.Mapp;
 import vn.edu.usth.payload.ImageRGBFromHyper;
-import vn.edu.usth.payload.ViewMap;
+import vn.edu.usth.payload.SearchMap;
 import vn.edu.usth.repository.ImageRepository;
 import vn.edu.usth.repository.MapRepository;
 
@@ -54,8 +56,38 @@ public class ImageService {
         return res.toString();
     }
 
-    public List<Map> getMapPointFromImageId(int imageId) {
+    public List<Mapp> getMapPointFromImageId(int imageId) {
         return mapRepository.getMapPointFromImageId(imageId);
+    }
+    public List<Mapp> search(SearchMap searchMap, int imageId) {
+        return mapRepository.search(searchMap, imageId);
+    }
+    @Transactional
+    public Mapp addData(Mapp mapp) {
+        mapRepository.persist(mapp);
+        return mapp;
+    }
+    public Mapp getDataById(int id) throws DataNotFoundException {
+        Mapp m = mapRepository.findById((long) id);
+        if (m == null) {
+            throw new DataNotFoundException("Not on Database");
+        }
+        return m;
+    }
+    @Transactional
+    public Mapp updateData(int id, Mapp mapp) throws DataNotFoundException {
+        Mapp m = getDataById(id);
+
+        m.setX(mapp.getX());
+        m.setY(mapp.getY());
+        m.setLabel(mapp.getLabel());
+
+        mapRepository.persist(m);
+        return m;
+    }
+    @Transactional
+    public void deleteData(int id) throws DataNotFoundException {
+        mapRepository.delete(getDataById(id));
     }
 
 }
