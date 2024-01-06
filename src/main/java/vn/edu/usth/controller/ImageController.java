@@ -34,13 +34,6 @@ public class ImageController {
         this.imageService = imageService;
     }
 
-    @GET
-    @RolesAllowed({"USER"})
-    @Path("/rgb/{id}")
-    public Response getHyperFromUserId(@PathParam("id") int id) {
-        return Response.ok(imageService.getImageFromUserId(id)).build();
-    }
-
     @POST
     @RolesAllowed({"USER"})
     @Path("/rgb")

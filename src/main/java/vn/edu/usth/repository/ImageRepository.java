@@ -4,15 +4,9 @@ import io.quarkus.hibernate.orm.panache.PanacheRepository;
 import jakarta.enterprise.context.ApplicationScoped;
 import vn.edu.usth.model.Image;
 
-import java.util.List;
-
 @ApplicationScoped
 public class ImageRepository implements PanacheRepository<Image> {
     public Image getImageFromId(int id) {
         return find("id", id).firstResult();
-    }
-
-    public List<Image> getImageFromUserId(int userId) {
-        return find("userId", userId).list();
     }
 }

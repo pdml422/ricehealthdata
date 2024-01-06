@@ -26,10 +26,6 @@ public class ImageService {
         this.mapRepository = mapRepository;
     }
 
-    public List<Image> getImageFromUserId(int userId) {
-        return imageRepository.getImageFromUserId(userId);
-    }
-
     public Image getImageFromId(int id) {
         return imageRepository.getImageFromId(id);
     }
