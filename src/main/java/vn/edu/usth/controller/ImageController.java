@@ -12,12 +12,13 @@ import org.eclipse.microprofile.openapi.annotations.parameters.RequestBody;
 import org.eclipse.microprofile.openapi.annotations.security.SecurityScheme;
 import vn.edu.usth.dto.MapDto;
 import vn.edu.usth.exception.DataNotFoundException;
-import vn.edu.usth.model.Mapp;
+import vn.edu.usth.model.MapPoint;
 import vn.edu.usth.payload.ImageRGBFromHyper;
 import vn.edu.usth.payload.MapResquest;
 import vn.edu.usth.service.image.ImageService;
 
 import java.io.IOException;
+import java.net.ServerSocket;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 
@@ -42,9 +43,15 @@ public class ImageController {
             return Response.status(Response.Status.FORBIDDEN).build();
         }
 
+        if (!isPortInUse(8888)) {
+            Process p = Runtime.getRuntime().exec("python -m http.server 8888");
+        } else {
+            System.out.println("The process is already running.");
+        }
+
         String filePath = "src/main/resources/Image/Output/" +
                 "hyper_" + request.id + "_" + request.red + "_" + request.green + "_" + request.blue + ".png";
-        Process p = Runtime.getRuntime().exec("python -m http.server 8888");
+
         if (Files.exists(Paths.get(filePath))) {
             return Response.ok("http://100.96.184.148:8888/src/main/resources/Image/Output/" +
                     "hyper_" + request.id + "_" + request.red + "_" + request.green + "_" + request.blue + ".png").build();
@@ -61,14 +68,13 @@ public class ImageController {
 
     @RolesAllowed({"USER"})
     @POST
-    @Path("/map/create")
-    @Produces(MediaType.APPLICATION_JSON)
-    public Mapp addData(@RequestBody MapResquest request, @HeaderParam("imageId") int imageId) {
-        Mapp newMap = new Mapp();
+    @Path("/map/add")
+    public MapPoint addData(@RequestBody MapResquest request) {
+        MapPoint newMap = new MapPoint();
         newMap.setX(request.X);
         newMap.setY(request.Y);
-        newMap.setLabel(request.label);
         newMap.setImageId(request.imageId);
+        newMap.setDataId(request.dataId);
 
         return imageService.addData(newMap);
     }
@@ -76,7 +82,7 @@ public class ImageController {
     @PUT
     @RolesAllowed({"USER"})
     @Path("map/{id}")
-    public Mapp updateData(@PathParam("id") int id, @Valid MapDto mapDto) throws DataNotFoundException {
+    public MapPoint updateData(@PathParam("id") int id, @Valid MapDto mapDto) throws DataNotFoundException {
         if (imageService != null && mapDto != null) {
             return imageService.updateData(id, mapDto.toMap());
         } else {
@@ -90,5 +96,17 @@ public class ImageController {
     public Response deleteData(@PathParam("id") int id) throws DataNotFoundException {
         imageService.deleteData(id);
         return Response.status(Response.Status.OK).build();
+    }
+
+    public boolean isPortInUse(int port) {
+        boolean inUse = false;
+
+        try (ServerSocket serverSocket = new ServerSocket(port)) {
+            inUse = false;
+        } catch (IOException e) {
+            inUse = true;
+        }
+
+        return inUse;
     }
 }

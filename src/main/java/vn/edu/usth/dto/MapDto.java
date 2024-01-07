@@ -5,7 +5,7 @@ import jakarta.validation.constraints.NotNull;
 import lombok.Getter;
 import lombok.Setter;
 import org.eclipse.microprofile.openapi.annotations.media.Schema;
-import vn.edu.usth.model.Mapp;
+import vn.edu.usth.model.MapPoint;
 
 @Getter
 @Setter
@@ -17,16 +17,12 @@ public class MapDto {
     @NotNull
     @Schema(name = "Y", required = true)
     private int y;
-    @NotBlank
-    @Schema(name = "label", required = true)
-    private String label;
 
-    public Mapp toMap() {
-        Mapp m = new Mapp();
+    public MapPoint toMap() {
+        MapPoint m = new MapPoint();
 
         m.setX(x);
         m.setY(y);
-        m.setLabel(label);
 
         return m;
     }

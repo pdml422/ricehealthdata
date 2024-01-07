@@ -8,7 +8,7 @@ import lombok.Setter;
 @Getter
 @Setter
 @Table(name = "map")
-public class Mapp {
+public class MapPoint {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Id
     @Column(name = "id")
@@ -20,10 +20,10 @@ public class Mapp {
     @Column(name = "Y")
     private int y;
     @Basic
-    @Column(name = "label")
-    private String label;
-    @Basic
     @Column(name = "imageId")
     private Integer imageId;
+    @Basic
+    @Column(name = "dataId")
+    private Integer dataId;
 
 }

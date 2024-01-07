@@ -5,7 +5,7 @@ import jakarta.inject.Inject;
 import jakarta.transaction.Transactional;
 import vn.edu.usth.exception.DataNotFoundException;
 import vn.edu.usth.model.Image;
-import vn.edu.usth.model.Mapp;
+import vn.edu.usth.model.MapPoint;
 import vn.edu.usth.payload.ImageRGBFromHyper;
 import vn.edu.usth.payload.SearchMap;
 import vn.edu.usth.repository.ImageRepository;
@@ -45,42 +45,43 @@ public class ImageService {
             }
             reader.close();
 
-        } catch(Exception e) {
+        } catch (Exception e) {
             e.printStackTrace();
         }
 
         return res.toString();
     }
 
-    public List<Mapp> getMapPointFromImageId(int imageId) {
+    public List<MapPoint> getMapPointFromImageId(int imageId) {
         return mapRepository.getMapPointFromImageId(imageId);
     }
-    public List<Mapp> search(SearchMap searchMap, int imageId) {
-        return mapRepository.search(searchMap, imageId);
-    }
+
     @Transactional
-    public Mapp addData(Mapp mapp) {
-        mapRepository.persist(mapp);
-        return mapp;
+    public MapPoint addData(MapPoint mapPoint) {
+        mapRepository.persist(mapPoint);
+        return mapPoint;
     }
-    public Mapp getDataById(int id) throws DataNotFoundException {
-        Mapp m = mapRepository.findById((long) id);
+
+    public MapPoint getDataById(int id) throws DataNotFoundException {
+        MapPoint m = mapRepository.findById((long) id);
         if (m == null) {
             throw new DataNotFoundException("Not on Database");
         }
         return m;
     }
+
     @Transactional
-    public Mapp updateData(int id, Mapp mapp) throws DataNotFoundException {
-        Mapp m = getDataById(id);
+    public MapPoint updateData(int id, MapPoint mapPoint) throws DataNotFoundException {
+        MapPoint m = getDataById(id);
 
-        m.setX(mapp.getX());
-        m.setY(mapp.getY());
-        m.setLabel(mapp.getLabel());
-
+        m.setX(mapPoint.getX());
+        m.setY(mapPoint.getY());
+        m.setImageId(mapPoint.getImageId());
+        m.setDataId(mapPoint.getDataId());
         mapRepository.persist(m);
         return m;
     }
+
     @Transactional
     public void deleteData(int id) throws DataNotFoundException {
         mapRepository.delete(getDataById(id));
