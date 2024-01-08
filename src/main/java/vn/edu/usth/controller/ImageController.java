@@ -10,11 +10,14 @@ import jakarta.ws.rs.core.Response;
 import org.eclipse.microprofile.openapi.annotations.enums.SecuritySchemeType;
 import org.eclipse.microprofile.openapi.annotations.parameters.RequestBody;
 import org.eclipse.microprofile.openapi.annotations.security.SecurityScheme;
+import org.jboss.resteasy.annotations.providers.multipart.MultipartForm;
+import org.jboss.resteasy.plugins.providers.multipart.MultipartFormDataInput;
 import vn.edu.usth.dto.MapDto;
 import vn.edu.usth.exception.DataNotFoundException;
 import vn.edu.usth.model.MapPoint;
 import vn.edu.usth.payload.ImageRGBFromHyper;
 import vn.edu.usth.payload.MapResquest;
+import vn.edu.usth.service.image.FileUploadService;
 import vn.edu.usth.service.image.ImageService;
 
 import java.io.IOException;
@@ -31,9 +34,20 @@ public class ImageController {
     private final ImageService imageService;
 
     @Inject
+    FileUploadService fileUploadService;
+
+    @Inject
     public ImageController(ImageService imageService) {
         this.imageService = imageService;
     }
+
+    @GET
+    @RolesAllowed({"USER"})
+    @Path("/rgb/{id}")
+    public Response getHyperFromUserId(@PathParam("id") int id) {
+        return Response.ok(imageService.getImageFromUserId(id)).build();
+    }
+
 
     @POST
     @RolesAllowed({"USER"})
@@ -96,6 +110,15 @@ public class ImageController {
     public Response deleteData(@PathParam("id") int id) throws DataNotFoundException {
         imageService.deleteData(id);
         return Response.status(Response.Status.OK).build();
+    }
+
+    @POST
+    @Path("/hyper")
+    @RolesAllowed({"USER"})
+    @Consumes(MediaType.MULTIPART_FORM_DATA)
+    @Produces(MediaType.TEXT_PLAIN)
+    public Response fileUpload(@MultipartForm MultipartFormDataInput input, @HeaderParam("userId") int userId) {
+        return Response.ok().entity(fileUploadService.uploadFile(input, userId)).build();
     }
 
     public boolean isPortInUse(int port) {
