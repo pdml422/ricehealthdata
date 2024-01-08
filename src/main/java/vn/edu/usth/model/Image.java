@@ -22,9 +22,6 @@ public class Image {
     @Column(name = "type")
     private String type;
     @Basic
-    @Column(name = "date")
-    private String date;
-    @Basic
     @Column(name = "userId")
     private int userId;
 
