@@ -103,6 +103,16 @@ public class StatisticalController {
 
         return statisticalService.addData(newStatistical);
     }
+    @GET
+    @RolesAllowed({"USER"})
+    @Path("/{id}")
+    public Statistical getDataById(@PathParam("id") int id) throws DataNotFoundException {
+        Statistical s = statisticalService.getDataById(id);
+        if (s == null) {
+            throw new DataNotFoundException("Not on Database");
+        }
+        return s;
+    }
 
     @PUT
     @RolesAllowed({"USER"})
