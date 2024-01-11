@@ -43,9 +43,23 @@ public class ImageController {
 
     @GET
     @RolesAllowed({"USER"})
-    @Path("/rgb/{id}")
+    @Path("/hyper/{id}")
     public Response getHyperFromUserId(@PathParam("id") int id) {
         return Response.ok(imageService.getImageFromUserId(id)).build();
+    }
+
+    @GET
+    @RolesAllowed({"USER"})
+    @Path("/hyper/{id}/header")
+    public Response getHyperHeaderFromUserId(@PathParam("id") int id) {
+        return Response.ok(imageService.getHeaderFromUserId(id)).build();
+    }
+
+    @DELETE
+    @RolesAllowed({"USER"})
+    @Path("/hyper/{id}")
+    public Response deleteHyper(@PathParam("id") int imageId) {
+        return imageService.deleteImage(imageId);
     }
 
 
@@ -63,14 +77,14 @@ public class ImageController {
             System.out.println("The process is already running.");
         }
 
-        String filePath = "src/main/resources/Image/Output/" +
+        String filePath = "src/main/resources/Image/" + userId + "/Output/" +
                 "hyper_" + request.id + "_" + request.red + "_" + request.green + "_" + request.blue + ".png";
 
         if (Files.exists(Paths.get(filePath))) {
-            return Response.ok("http://100.96.184.148:8888/src/main/resources/Image/Output/" +
+            return Response.ok("http://100.96.184.148:8888/src/main/resources/Image/" + userId + "/Output/" +
                     "hyper_" + request.id + "_" + request.red + "_" + request.green + "_" + request.blue + ".png").build();
         }
-        return Response.ok(imageService.getImageRGBFromHyper(request)).build();
+        return Response.ok(imageService.getImageRGBFromHyper(request, userId)).build();
     }
 
     @GET

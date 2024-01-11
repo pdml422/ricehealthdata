@@ -3,15 +3,16 @@ package vn.edu.usth.service.image;
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.inject.Inject;
 import jakarta.transaction.Transactional;
+import jakarta.ws.rs.core.Response;
 import vn.edu.usth.exception.DataNotFoundException;
 import vn.edu.usth.model.Image;
 import vn.edu.usth.model.MapPoint;
 import vn.edu.usth.payload.ImageRGBFromHyper;
-import vn.edu.usth.payload.SearchMap;
 import vn.edu.usth.repository.ImageRepository;
 import vn.edu.usth.repository.MapRepository;
 
 import java.io.BufferedReader;
+import java.io.File;
 import java.io.InputStreamReader;
 import java.util.List;
 
@@ -30,16 +31,33 @@ public class ImageService {
         return imageRepository.getImageFromUserId(userId);
     }
 
+    public List<Image> getHeaderFromUserId(int userId) {
+        return imageRepository.getHeaderFromUserId(userId);
+    }
+
+    @Transactional
+    public Response deleteImage(int imageId) {
+        String filePath = getImageFromId(imageId).getPath();
+        File file = new File(filePath);
+        if (file.delete()) {
+            imageRepository.delete(getImageFromId(imageId));
+            return Response.ok().build();
+        } else {
+            return Response.status(Response.Status.NOT_FOUND).build();
+        }
+
+    }
+
     public Image getImageFromId(int id) {
         return imageRepository.getImageFromId(id);
     }
 
-    public String getImageRGBFromHyper(ImageRGBFromHyper request) {
+    public String getImageRGBFromHyper(ImageRGBFromHyper request, int userId) {
         StringBuilder res = new StringBuilder();
         try {
             String imagePath = getImageFromId(request.id).getPath();
             String pythonPath = "python src/main/resources/hyper.py "
-                    + request.id + " " + imagePath + " " + request.red + " " + request.green + " " + request.blue;
+                    + request.id + " " + userId + " " + imagePath + " " + request.red + " " + request.green + " " + request.blue;
             Process p = Runtime.getRuntime().exec(pythonPath);
 
             BufferedReader reader = new BufferedReader(new InputStreamReader(p.getInputStream()));

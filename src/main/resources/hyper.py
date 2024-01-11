@@ -30,15 +30,16 @@ def hyperToRGB(id, hdr_path, red, green, blue):
     rgb_image = np.dstack((blue_band, green_band, red_band))
     rgb_image = rgb_image * 7
 
-    cv2.imwrite(f'src/main/resources/Image/Output/hyper_{id}_{red_band_index}_{green_band_index}_{blue_band_index}.png', rgb_image)
+    cv2.imwrite(f'src/main/resources/Image/{userId}/Output/hyper_{id}_{red_band_index}_{green_band_index}_{blue_band_index}.png', rgb_image)
 
-    print(f'http://100.96.184.148:8888/src/main/resources/Image/Output/hyper_{id}_{red_band_index}_{green_band_index}_{blue_band_index}.png')
+    print(f'http://100.96.184.148:8888/src/main/resources/Image/{userId}/Output/hyper_{id}_{red_band_index}_{green_band_index}_{blue_band_index}.png')
 
 
 if __name__ == '__main__':
     id = int(sys.argv[1])
-    hdr_path = sys.argv[2]
-    red = int(sys.argv[3])
-    green = int(sys.argv[4])
-    blue = int(sys.argv[5])
+    userId = int(sys.argv[2])
+    hdr_path = sys.argv[3]
+    red = int(sys.argv[4])
+    green = int(sys.argv[5])
+    blue = int(sys.argv[6])
     hyperToRGB(id, hdr_path, red, green, blue)

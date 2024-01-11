@@ -46,13 +46,13 @@ public class FileUploadService {
                 fileName = getFileName(header);
                 fileNames.add(fileName);
                 InputStream inputStream = inputPart.getBody(InputStream.class, null);
-                writeFile(inputStream,fileName);
+                writeFile(inputStream,fileName,userId);
 
-                String path = "src/main/resources/Image/Hyper_spectral/" + fileName;
+                String path = "src/main/resources/Image/" + userId + "/Hyper_spectral/" + fileName;
                 Image image = new Image();
                 image.setPath(path);
                 image.setUserId(userId);
-                image.setType("hyper");
+                image.setType("header");
                 imageRepository.persist(image);
 
             } catch (Exception e) {
@@ -66,7 +66,15 @@ public class FileUploadService {
                 fileName = getFileName(header);
                 fileNames.add(fileName);
                 InputStream inputStream = inputPart.getBody(InputStream.class, null);
-                writeFile(inputStream,fileName);
+                writeFile(inputStream,fileName,userId);
+
+                String path = "src/main/resources/Image/" + userId + "/Hyper_spectral/" + fileName;
+                Image image = new Image();
+                image.setPath(path);
+                image.setUserId(userId);
+                image.setType("image");
+                imageRepository.persist(image);
+
             } catch (Exception e) {
                 e.printStackTrace();
             }
@@ -75,8 +83,8 @@ public class FileUploadService {
         return "Files Successfully Uploaded";
     }
 
-    private void writeFile(InputStream inputStream,String fileName) {
-        File customDir = new File(UPLOAD_DIR);
+    private void writeFile(InputStream inputStream,String fileName, int userId) {
+        File customDir = new File(UPLOAD_DIR + userId + "/Hyper_spectral");
         fileName = customDir.getAbsolutePath() + File.separator + fileName;
 
         try (FileOutputStream fos = new FileOutputStream(fileName);
