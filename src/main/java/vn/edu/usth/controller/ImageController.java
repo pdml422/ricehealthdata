@@ -42,7 +42,7 @@ public class ImageController {
     }
 
     @GET
-    @RolesAllowed({"USER"})
+    @RolesAllowed({"USER", "ADMIN"})
     @Path("/hyper/{id}")
     public Response getHyperFromUserId(@PathParam("id") int id) {
         return Response.ok(imageService.getImageFromUserId(id)).build();
@@ -56,7 +56,7 @@ public class ImageController {
     }
 
     @DELETE
-    @RolesAllowed({"USER"})
+    @RolesAllowed({"USER", "ADMIN"})
     @Path("/hyper/{id}")
     public Response deleteHyper(@PathParam("id") int imageId) {
         return imageService.deleteImage(imageId);
