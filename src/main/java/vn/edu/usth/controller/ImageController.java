@@ -119,7 +119,7 @@ public class ImageController {
     }
 
     @DELETE
-    @RolesAllowed({"USER"})
+    @RolesAllowed({"USER", "ADMIN"})
     @Path("map/{id}")
     public Response deleteData(@PathParam("id") int id) throws DataNotFoundException {
         imageService.deleteData(id);
@@ -128,7 +128,7 @@ public class ImageController {
 
     @POST
     @Path("/hyper")
-    @RolesAllowed({"USER"})
+    @RolesAllowed({"USER", "ADMIN"})
     @Consumes(MediaType.MULTIPART_FORM_DATA)
     @Produces(MediaType.TEXT_PLAIN)
     public Response fileUpload(@MultipartForm MultipartFormDataInput input, @HeaderParam("userId") int userId) {
