@@ -82,7 +82,7 @@ public class UserController {
     }
 
     @PUT
-    @RolesAllowed({"ADMIN"})
+    @RolesAllowed({"ADMIN", "USER"})
     @Path("/{id}")
     @Operation(summary = "Update a user", description = "Update a user by id")
     @APIResponses(value = {
