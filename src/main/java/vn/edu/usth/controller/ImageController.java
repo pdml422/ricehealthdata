@@ -135,6 +135,13 @@ public class ImageController {
         return Response.ok().entity(fileUploadService.uploadFile(input, userId)).build();
     }
 
+    @GET
+    @Path("/resolution/{id}")
+    @RolesAllowed({"USER"})
+    public Response getResolution(@PathParam("id") int id) {
+        return Response.ok(imageService.getResolution(id)).build();
+    }
+
     public boolean isPortInUse(int port) {
         boolean inUse = false;
 

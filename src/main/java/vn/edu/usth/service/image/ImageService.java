@@ -8,6 +8,7 @@ import vn.edu.usth.exception.DataNotFoundException;
 import vn.edu.usth.model.Image;
 import vn.edu.usth.model.MapPoint;
 import vn.edu.usth.payload.ImageRGBFromHyper;
+import vn.edu.usth.payload.ImageResolution;
 import vn.edu.usth.repository.ImageRepository;
 import vn.edu.usth.repository.MapRepository;
 
@@ -72,6 +73,32 @@ public class ImageService {
         }
 
         return res.toString();
+    }
+
+    public ImageResolution getResolution(int imageId) {
+        String imagePath = getImageFromId(imageId).getPath();
+        StringBuilder res = new StringBuilder();
+        try {
+            String pythonPath = "python src/main/resources/resolution.py " + imagePath;
+            Process p = Runtime.getRuntime().exec(pythonPath);
+
+            BufferedReader reader = new BufferedReader(new InputStreamReader(p.getInputStream()));
+            String line;
+            while ((line = reader.readLine()) != null) {
+                res.append(line);
+            }
+            reader.close();
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        String[] resolution = res.toString().split(" ");
+        ImageResolution imageResolution = new ImageResolution();
+        imageResolution.setWidth(Integer.parseInt(resolution[0]));
+        imageResolution.setHeight(Integer.parseInt(resolution[1]));
+
+        return imageResolution;
     }
 
     public List<MapPoint> getMapPointFromImageId(int imageId) {
