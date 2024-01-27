@@ -71,11 +71,11 @@ public class ImageController {
             return Response.status(Response.Status.FORBIDDEN).build();
         }
 
-        if (!isPortInUse(8888)) {
-            Process p = Runtime.getRuntime().exec("python -m http.server 8888");
-        } else {
-            System.out.println("The process is already running.");
-        }
+//        if (!isPortInUse(8888)) {
+//            Process p = Runtime.getRuntime().exec("python -m http.server 8888");
+//        } else {
+//            System.out.println("The process is already running.");
+//        }
 
         String filePath = "src/main/resources/Image/" + userId + "/Output/" +
                 "hyper_" + request.id + "_" + request.red + "_" + request.green + "_" + request.blue + ".png";
